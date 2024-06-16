@@ -1,0 +1,64 @@
+﻿@model NewsViewModel
+
+<style>
+        .news-item {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .news-item img {
+            max-width: 300px;
+            margin-right: 20px;
+        }
+        .news-item div {
+            max-width: 600px;
+        }
+    </style>
+    <h1>Haberler</h1>
+
+    <form method="get" asp-action="Index">
+        <label for="category">Kategori:</label>
+    <select name="category" id="category" asp-items="@(new SelectList(Model.Categories,"CategoryId","Title",Model.SelectedCategoryId))">
+            <option value="">Hepsi</option>
+        </select>
+        <label for="keyword">Anahtar Kelime:</label>
+        <input type="text" name="keyword" id="keyword" value="@Model.Keyword">
+
+        <button type="submit">Filtrele</button>
+    </form>
+
+    <div id="newsList">
+        @foreach (var news in Model.PagedNews.Items)
+        {
+            <div class="news-item">
+                <img src="@news.ImageUrl" alt="@news.Title" />
+                <div>
+                    <h3><a asp-action="Detail">@news.Title</a></h3>
+                    <p>@news.ShortText</p>
+                    <p><strong>Yayınlanma Tarihi:</strong> @news.PublishDate</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <nav>
+        <ul class="pagination">
+            @if (Model.PagedNews.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?pageNumber=@(Model.PagedNews.CurrentPage - 1)&pageSize=@Model.PagedNews.PageSize&category=@Model.SelectedCategoryId&keyword=@Model.Keyword">Önceki</a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.PagedNews.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PagedNews.CurrentPage ? "active" : "")">
+                <a class="page-link" href="?pageNumber=@i&pageSize=@Model.PagedNews.PageSize&category=@Model.SelectedCategoryId&keyword=@Model.Keyword">@i</a>
+                </li>
+            }
+            @if (Model.PagedNews.CurrentPage < Model.PagedNews.TotalPages)
+            {
+                <li class="page-item">
+                <a class="page-link" href="?pageNumber=@(Model.PagedNews.CurrentPage + 1)&pageSize=@Model.PagedNews.PageSize&category=@Model.SelectedCategoryId&keyword=@Model.Keyword">Sonraki</a>
+                </li>
+            }
+        </ul>
+    </nav>

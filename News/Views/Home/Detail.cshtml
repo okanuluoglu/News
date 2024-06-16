@@ -1,0 +1,23 @@
+﻿@model NewsDetailViewModel
+
+
+<h1>@Model.Title</h1>
+<div class="news-detail">
+    <img src="@Model.ImageUrl" alt="@Model.Title" />
+    <p>@Model.BodyText</p>
+</div>
+
+<h2>İlgili haber</h2>
+<div id="relatedNewsList">
+    @if (Model.RelatedNews != null)
+    {
+        <div class="related-news-item">
+            <img src="@Model.RelatedNews.ImageUrl" alt="@Model.RelatedNews.Title" />
+            <div>
+                <h4><a href="#">@Model.RelatedNews.Title</a></h4>
+                <p>@Model.RelatedNews.ShortText</p>
+            </div>
+        </div>
+    }
+
+</div>
